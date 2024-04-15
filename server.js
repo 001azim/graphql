@@ -21,7 +21,7 @@ const users = [
     qualification: "Bachelor's in Mechanical Engineering",
   },
 ];
-// console.log(crypto.randomUUID())
+// console.log(crypto.randomUUID()) create random texts
 
 // users is what the client request and  [User] is the return type in form of array
 
@@ -69,7 +69,7 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    greet: () => "hello world",
+    greet: () =>"yg",
     users: () => users,
     user: (parent, { id }, context) => {
       console.log(id);
@@ -84,13 +84,14 @@ book:(parent)=>{ return books.filter((item)=>item.sold_to==parent.id)}
   },
 
   Mutation: {
-    createuser: (_, { adduser }) => {
+    createuser: (_, { adduser },{fromcontext}) => {
       const newuser = {
         id: crypto.randomUUID(),
         ...adduser,
       };
 
       users.push(newuser);
+      console.log(`${fromcontext}${newuser.firstname}`) 
       return newuser;
     },
     deleteuser: (parent, { id }, context) => {
@@ -105,7 +106,9 @@ book:(parent)=>{ return books.filter((item)=>item.sold_to==parent.id)}
   },
 };
 
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({ typeDefs, resolvers,context:{
+  fromcontext:"hi"
+}});
 
 server.listen().then(({ url }) => {
   console.log(`🚀 Server ready at: ${url}`);
